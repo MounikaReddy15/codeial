@@ -5,6 +5,9 @@ const app= express();
 
 const port = 8000;
 
+//we need to tell the app to use the exported router
+app.use('/', require('./routes'));
+
 //to make the app listen
 app.listen(port, function(err){
     if(err) {
