@@ -5,13 +5,24 @@ const app= express();
 
 const port = 8000;
 
+//require express layout
+const expressLayouts = require('express-ejs-layouts');
+
+
+//folder for static files
+app.use(express.static('./assets'));
+
+//define the layouts before the routes
+//we need to tell the server to use them
+app.use(expressLayouts);
+
 //we need to tell the app to use the exported router
 app.use('/', require('./routes'));
 
 
 //to tell use ejs as view engine
 //set up the view engine
-app.set('view engine', ejs);
+app.set('view engine', 'ejs');
 app.set('views', './views');
 
 //to make the app listen
