@@ -16,6 +16,10 @@ app.use(express.static('./assets'));
 //we need to tell the server to use them
 app.use(expressLayouts);
 
+//extract style and script from the subpages into the layout
+app.set('layout extractStyles', true);
+app.set('layout extractScripts', true);
+
 //we need to tell the app to use the exported router
 app.use('/', require('./routes'));
 
