@@ -1,4 +1,5 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 
 // to run express funct
 const app= express();
@@ -10,6 +11,10 @@ const expressLayouts = require('express-ejs-layouts');
 
 //require db
 const db= require('./config/mongoose');
+
+app.use(express.urlencoded());
+
+app.use(cookieParser());
 
 
 //folder for static files
