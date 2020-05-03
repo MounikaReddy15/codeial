@@ -7,6 +7,7 @@ const app= express();
 const port = 8000;
 
 //require express layout
+//for dynamic scripts and styles
 const expressLayouts = require('express-ejs-layouts');
 
 //require db
