@@ -6,7 +6,7 @@ module.exports.profile = function(req,res) {
 
 
     return res.render('profile', {
-        title: "Profile"
+        title: "User Profile"
   });
    
 //   res.end('<h1> User Profile </h1>');
@@ -18,6 +18,9 @@ module.exports.images = function(req,res) {
 
 // render the sign up page
 module.exports.signUp =  function(req,res) {
+    if(req.isAuthenticated()) {
+       return res.redirect('./profile');
+    }
     return res.render('user_sign_up', {
         title: "Codeial | Sign Up"
     });
@@ -25,6 +28,9 @@ module.exports.signUp =  function(req,res) {
 
 // render the sign in page
 module.exports.signIn =  function(req,res) {
+    if(req.isAuthenticated()) {
+        return res.redirect('./profile');
+    }
     return res.render('user_sign_in', {
         title: "Codeial | Sign In"
     });
@@ -49,7 +55,7 @@ module.exports.create = function(req,res) {
                     console.log('error in creating user while signing up');
                     return;
                 }
-                return res.redirect('/users/sign-in');
+                return res.redirect('/sign-in');
              })
           }else  {
             return res.redirect('back');
@@ -59,6 +65,13 @@ module.exports.create = function(req,res) {
 
 
 //sign in and create a seesion for the user
+//after authenticating 
 module.exports.createSession = function(req,res) {
-    // TODO later
+    return res.redirect('/');
+}
+
+module.exports.destroySession = function(req,res){
+    // passport gives this to req
+    req.logout()
+    return res.redirect('/');
 }
