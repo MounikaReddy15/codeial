@@ -18,6 +18,12 @@
                       <% for(post of posts) { %> 
                         <li>
                                 <p>
+                                        <!-- if the user is signed in & who signed is the one who created the post -->
+                                        <% if(locals.user && locals.user.id == post.user.id) { %> 
+                                        <small>
+                                                <a href="/posts/destroy/<%= post.id %>" > X </a>
+                                        </small>
+                                        <% } %>
                                 <%= post.content %>
                                 <br>
                                 <small>
