@@ -37,3 +37,24 @@ module.exports.create = function(req,res) {
     }); 
 
 }
+
+ module.exports.destroy = function(req,res) {
+    //  to check comment exists in the db
+     Comment.findById(req.params.id, function(err, comment) {
+        //  user.id is string
+        // user._id is objectId
+        if(comment.user == req.user.id) {
+            // save post id to delete comment in comments array of post
+            let postId = comment.post;
+            // delete the comment
+            comment.remove();
+            // pull: pulls out the id which is matching
+            Post.findByIdAndUpdate(postId, { $pull: {comments: req.params.id}}, function(err,post){
+                return res.redirect('back');
+            });
+        }else {
+            return res.redirect('back');
+        }
+
+     });
+ }
