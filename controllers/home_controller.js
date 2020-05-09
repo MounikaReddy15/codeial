@@ -31,11 +31,14 @@ module.exports.home =function(req,res) {
 
    })
     .exec(function(err, posts){
-
-     
-       return res.render('home', {
-    title: "Codeial | Home",
-    posts: posts
+     // to know all the users 
+      User.find({}, function(err,users) {
+        return res.render('home', {
+          title: "Codeial | Home",
+          posts: posts,
+          all_users: users
+      });
+      
 });
 });
 
