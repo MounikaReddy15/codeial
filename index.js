@@ -25,6 +25,12 @@ const MongoStore = require('connect-mongo')(session);
 // sass
 const sassMiddleware = require('node-sass-middleware');
 
+// flash-message
+const flash = require('connect-flash');
+
+// require the flash  middleware
+const customMware = require('./config/middleware');
+
 app.use(sassMiddleware({
     src: './assets/scss',
     dest: './assets/css',
@@ -92,6 +98,12 @@ app.use(passport.session());
 
 //setup current user usage
 app.use(passport.setAuthenticatedUser);
+
+// setup to use flash
+// we need to put if after session use coz it uses session cookies
+app.use(flash());
+// to use flash-middleware
+app.use(customMware.setFlash);
 
 //we need to tell the app to use the exported router
 app.use('/', require('./routes'));

@@ -80,11 +80,17 @@ module.exports.create = function(req,res) {
 //sign in and create a seesion for the user
 //after authenticating 
 module.exports.createSession = function(req,res) {
+    req.flash('success', 'Logged In Successfully');
     return res.redirect('/');
 }
+
+// whenever signin happens flash message is sent into the session cookie
+// whenever refresh happens flash msg is erased
 
 module.exports.destroySession = function(req,res){
     // passport gives this to req
     req.logout()
+    // this is in req, to pass it to res(ejs) we can use middlewares
+    req.flash('success', 'You have logged out!');
     return res.redirect('/');
 }
