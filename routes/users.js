@@ -13,6 +13,7 @@ console.log('router profile loaded');
 
 
 router.get('/profile/:id', passport.checkAuthentication,  usersController.profile);
+router.post('/update/:id', passport.checkAuthentication,  usersController.update);
 router.get('/images', usersController.images);
 router.get('/sign-up', usersController.signUp);
 router.get('/sign-in', usersController.signIn);

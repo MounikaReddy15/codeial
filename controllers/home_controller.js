@@ -2,8 +2,8 @@ const Post = require('../models/post');
 const User = require('../models/user');
 
 
-
-module.exports.home =function(req,res) {
+// using async await
+module.exports.home = async function(req,res) {
       //to see the cookie
     // console.log(req.cookies);
  
@@ -18,9 +18,10 @@ module.exports.home =function(req,res) {
 //   });
 //    });
     
+try {
    //callback func in exec
    //finding all posts and populate the user of each post
-   Post.find({})
+   let posts =  await Post.find({})
    .populate('user')
       // nested population
    .populate({
@@ -29,21 +30,35 @@ module.exports.home =function(req,res) {
       path: 'user'
      }
 
-   })
-    .exec(function(err, posts){
+   });
+    //  exec func is callback of Post
+    // .exec(function(err, posts){
      // to know all the users 
-      User.find({}, function(err,users) {
+     let users = await User.find({}); 
         return res.render('home', {
           title: "Codeial | Home",
           posts: posts,
           all_users: users
       });
       
-});
-});
+} catch(err) {
+  console.log("error", err);
+}
 
   //directly sending to the browser
     // return res.end('<h1> Express is up for codeial! </h1>');
 }
 
 // module.exports.actionName = function(req,res){}
+
+// first way to optimize use async await
+// other two
+
+// using then
+// Post.find({}).populate('comments').then(function());
+
+// promise like functionality, .exec
+// let posts = Post.find({}).populate('comments').exec();
+// to execute posts
+// posts.then();
+// post.then will contain the execution of above query

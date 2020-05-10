@@ -1,6 +1,6 @@
 const User =  require('../models/user');
 
-
+// not using async coz no nesting level, only one callback
 module.exports.profile = function(req,res) {
     User.findById(req.params.id, function(err,user) {
         return res.render('profile', {
@@ -11,6 +11,18 @@ module.exports.profile = function(req,res) {
     });
 
 //   res.end('<h1> User Profile </h1>');
+}
+
+module.exports.update = function(req,res) {
+    // check the user
+    if(req.user.id == req.params.id) {
+        User.findByIdAndUpdate(req.params.id, req.body, function(err,user) {
+            return res.redirect('back');
+        });
+    } else {
+        // if user didn't match send code unauthorized
+        return res.status(401).send('Unauthorized');
+    }
 }
 
 module.exports.images = function(req,res) {
