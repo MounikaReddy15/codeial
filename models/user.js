@@ -1,6 +1,16 @@
 //to create a schema we require mongoose
 const mongoose = require('mongoose');
 
+// setting multer individually, coz profile pic is specific to user
+const multer = require('multer');
+
+// setting up path where the file will be stored
+const path = require('path');
+
+// define which path
+// the string is converted to path using path module
+const AVATAR_PATH = path.join('/uploads/users/avatars');
+
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -14,13 +24,20 @@ const userSchema = new mongoose.Schema({
      name: {
         type: String,
         required: true,
-    },
-    //  {
-    //     //timestamps are created at, updated at
-    //     timestamps: true
-    //  }
+     }, 
+     avatar: {
+        type: String,
+
+    }},
+     {
+        //timestamps are created at, updated at
+        timestamps: true
+     
 });
-    userSchema.set('timestamps', true); 
+    // userSchema.set('timestamps', true); 
+
+
+    
     
 
 

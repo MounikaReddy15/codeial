@@ -22,6 +22,8 @@ try {
    //callback func in exec
    //finding all posts and populate the user of each post
    let posts =  await Post.find({})
+   // for sorting posts
+   .sort('-createdAt')  
    .populate('user')
       // nested population
    .populate({
