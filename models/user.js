@@ -37,7 +37,22 @@ const userSchema = new mongoose.Schema({
     // userSchema.set('timestamps', true); 
 
 
+    let storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+          cb(null, path.join(__dirname, '..', AVATAR_PATH));
+        },
+        filename: function (req, file, cb) {
+          cb(null, file.fieldname + '-' + Date.now());
+        }
+      });
+
     
+     // static func for users
+     //   attaches the diskStorage on multer in the storage property
+     //single says only one instance will be uploaded of avatar  
+     userSchema.statics.uploadedAvatar = multer({ storage: storage }).single('avatar');
+     //to make avatarpath publically available  
+     userSchema.statics.avatarPath = AVATAR_PATH;
     
 
 
