@@ -27,7 +27,7 @@ module.exports.create = async function(req,res) {
          // console.log('error in creating a post',err);
          return res.redirect('back');
         }
-     }
+}
 
 module.exports.destroy = async function(req,res) {
     // find post if it exits or not to delete
