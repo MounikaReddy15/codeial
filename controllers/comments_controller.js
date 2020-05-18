@@ -3,6 +3,7 @@ const Post = require('../models/post');
 const commentsMailer = require('../mailers/comments_mailer');
 const queue = require('../config/kue');
 const commentEmailWorker =  require('../workers/comment_email_worker');
+const Like = require('../models/like');
 
 // module.exports.create = async function(req,res) {
 //     find post first
@@ -88,61 +89,64 @@ module.exports.create = async function(req,res) {
             
 
 
-//   module.exports.destroy = async function(req,res) {
-//     try {
-//         let comment = await Comment.findById(req.params.id);
+  module.exports.destroy = async function(req,res) {
+    try {
+        let comment = await Comment.findById(req.params.id);
 
-//         if(comment.user == req.user.id){
-//          let postId = comment.post;
-//          comment.remove();
+        if(comment.user == req.user.id){
+         let postId = comment.post;
+         comment.remove();
 
-//          let post = await Post.findByIdAndUpdate(postId, {$pull: {comments: req.params.id}});
+         let post = await Post.findByIdAndUpdate(postId, {$pull: {comments: req.params.id}});
 
-//          //  send the comment id which was deleted back to the views
-//          if(req.xhr) {
-//              return res.status(200).json({
-//                  data: {
-//                      comment_id: req.params.id
-//                  },
-//                  message: "Post Deleted"
-//              });
-//          }
-//           req.flash('success', 'Comment Deleted!');
+         //change :: destroy the associated likes for this comment
+          await Like.deleteMany({likeable: comment._id, onModel: 'Comment'});
 
-//           return res.redirect('back');
+         //  send the comment id which was deleted back to the views
+         if(req.xhr) {
+             return res.status(200).json({
+                 data: {
+                     comment_id: req.params.id
+                 },
+                 message: "Post Deleted"
+             });
+         }
+          req.flash('success', 'Comment Deleted!');
 
-//         }else {
-//             req.flash('error', 'Unauthorized');
-//              return res.redirect('back');
-//         }
-//     } catch(err) {
-//         req.flash('error', err);
-//         return;
+          return res.redirect('back');
 
-//     }
-// }
+        }else {
+            req.flash('error', 'Unauthorized');
+             return res.redirect('back');
+        }
+    } catch(err) {
+        req.flash('error', err);
+        return;
 
- module.exports.destroy = async function(req,res) {
+    }
+}
+
+//  module.exports.destroy = async function(req,res) {
     //  to check comment exists in the db
-     try{
-      let comment = await Comment.findById(req.params.id);
+    //  try{
+    //   let comment = await Comment.findById(req.params.id);
         //  user.id is string
         // user._id is objectId
-        if(comment.user == req.user.id) {
+        // if(comment.user == req.user.id) {
             // save post id to delete comment in comments array of post
-            let postId = comment.post;
+            // let postId = comment.post;
             // delete the comment
-            comment.remove();
+            // comment.remove();
             // pull: pulls out the id which is matching
-           let post = Post.findByIdAndUpdate(postId, { $pull: {comments: req.params.id}});
-                return res.redirect('back');
-            }
-        else {
-            return res.redirect('back');
-        }
+        //    let post = Post.findByIdAndUpdate(postId, { $pull: {comments: req.params.id}});
+                // return res.redirect('back');
+            // }
+//         else {
+//             return res.redirect('back');
+//         }
 
-     }catch(err) {
-        console.log('error', err);
-        return;
-}
- }
+//      }catch(err) {
+//         console.log('error', err);
+//         return;
+// }
+//  }

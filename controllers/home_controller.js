@@ -1,9 +1,9 @@
 const Post = require('../models/post');
 const User = require('../models/user');
 
-
-// using async await
 module.exports.home = async function(req,res) {
+// using async await
+
       //to see the cookie
     // console.log(req.cookies);
  
@@ -17,10 +17,11 @@ module.exports.home = async function(req,res) {
 //         posts: posts
 //   });
 //    });
-    
+
 try {
    //callback func in exec
    //finding all posts and populate the user of each post
+    // Change :: populate the likes of each post and comment
    let posts =  await Post.find({})
    // for sorting posts
    .sort('-createdAt')  
@@ -30,9 +31,12 @@ try {
      path: 'comments',
      populate: {
       path: 'user'
+     },
+     populate: {
+        // comment likes
+       path: 'likes'
      }
-
-   });
+   }).populate('likes');
     //  exec func is callback of Post
     // .exec(function(err, posts){
      // to know all the users 
@@ -64,3 +68,34 @@ try {
 // to execute posts
 // posts.then();
 // post.then will contain the execution of above query
+
+
+// ta soln
+// module.exports.home = async function(req,res) {
+// let posts = await Post.find({})
+//         .sort('-createdAt')
+//         .populate('user')
+//         .populate('likes')
+//         .populate({
+            //For both user and likes, path is comments
+            //If you call populate() multiple times with the same path, only the last one will take effect.
+            // path: 'comments',
+            // populate: {
+            //     path: 'likes',
+                //If you call populate() multiple times with the same path, only the last one will take effect,here user,likes is not populated for comment schema
+            //     path: 'user'
+               
+            // }, 
+            //If you call populate() multiple times with the same path, only the last one will take effect, if we uncomment it likes will populate but not user
+            // populate: {
+            //     path: 'likes'
+            // }
+        // })
+        //This is the way to populate multiple schema on same path, here path is comments
+      //   .populate({
+      //       path:'comments',
+      //       populate:{
+      //           path:'likes'
+      //       }
+      //   });
+      // }

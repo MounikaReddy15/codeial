@@ -11,10 +11,10 @@ exports.newComment = (comment) => {
 
     // send an email
     nodeMailer.transporter.sendMail({
-        from: 'mona',
+        from: 'mona@g.com',
         // sending to the person who commented
         to: comment.user.email,
-        subject: 'new comment published',
+        subject: 'New Comment Published',
         html: htmlString
     }, (err, info) => {
         // info carries the info'tn about the req that has been sent

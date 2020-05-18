@@ -28,7 +28,15 @@ const userSchema = new mongoose.Schema({
      avatar: {
         type: String,
 
-    }},
+    },
+    friendships: [
+      // from user and to user id's are added so that we need not go to freindship again & again, to optimize
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Friendship'
+    }
+  ]
+  },
      {
         //timestamps are created at, updated at
         timestamps: true
