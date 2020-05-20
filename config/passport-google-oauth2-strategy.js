@@ -3,11 +3,13 @@ const googleStrategy = require('passport-google-oauth').OAuth2Strategy;
 // for generating random passwords
 const crypto = require('crypto');
 const User = require('../models/user');
+const env = require('./environment');
+
 // tell passport to use new Strategy(google Strategy) for google login
 passport.use(new googleStrategy({
-    clientID: '1053336096562-h9mstv96ifkpah5ck9ovpdj9svf179e0.apps.googleusercontent.com',
-    clientSecret: 'uKenCLkReyZSbnwFPYCMJl26',
-    callbackURL: 'http://localhost:8000/users/auth/google/callback'
+    clientID: env.google_client_id,
+    clientSecret: env.google_client_secret,
+    callbackURL: env.google_call_back_url
 },
  // just like jwt google also generates access token and gives it to us 
  // if access token expires, refresh helps get us another token  

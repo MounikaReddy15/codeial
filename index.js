@@ -1,4 +1,9 @@
 const express = require('express');
+
+const env = require('./config/environment');
+
+const logger = require('morgan');
+
 const cookieParser = require('cookie-parser');
 
 // to run express funct
@@ -45,17 +50,21 @@ const chatSockets = require('./config/chat_sockets').chatSockets(chatServer);
 chatServer.listen(5000);
 console.log('chat server is listening on port: 5000');
 
+// for defining assets
+const path = require('path');
+
+if(env.name == 'development') {
 app.use(sassMiddleware({
-    src: './assets/scss',
-    dest: './assets/css',
+    src:  path.join(__dirname, env.asset_path, 'scss'),
+    // dest: './assets/css',
+    dest:  path.join(__dirname, env.asset_path, 'css'),
     //debug: to show errors
     debug: true,
     outputStyle: 'extended',
     //where shud server look for css files
     prefix: '/css'
-
-
 }));
+}
 
 app.use(express.urlencoded());
 
@@ -63,7 +72,7 @@ app.use(cookieParser());
 
 
 //folder for static files
-app.use(express.static('./assets'));
+app.use(express.static(env.asset_path));
 
 // for using avatars
 //  the directory of index joined with uploads which means codeial/uploads is available in uploads
@@ -90,7 +99,7 @@ app.set('views', './views');
 app.use(session({
     name: 'codeial',
     //TODO change the secret before deployment in production mode
-    secret: 'blahsomething',
+    secret: env.session_cookie_key,
     saveUninitialized: false,
     resave: false,
     cookie: {

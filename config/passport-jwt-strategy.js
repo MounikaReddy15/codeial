@@ -7,6 +7,8 @@ const ExtractJWT = require('passport-jwt').ExtractJwt;
 // authentication on user
 const User = require('../models/user');
 
+const env = require('./environment');
+
 // for encryption
 // header is a list of keys, it has a key called authorization(it is also list of keys and have a key called bearer)
 // bearer will be having the jwt token
@@ -14,7 +16,7 @@ let opts = {
     // find jwt from header using authheader, it will decrypted using codeial
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     // this is encry/decrypt string
-    secretOrKey: 'codeial'
+    secretOrKey: env.jwt_secret
 }
 
 // tell passport to use jwt strategy
