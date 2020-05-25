@@ -15,8 +15,7 @@ const port = 8000;
 //for dynamic scripts and styles
 const expressLayouts = require('express-ejs-layouts');
 
-//require db
-const db= require('./config/mongoose');
+const db = require("./config/mongoose");
 
 //used for session cookie
 const session = require('express-session');
@@ -79,6 +78,9 @@ app.use(express.static(env.asset_path));
 // make the uploads path available to the browser
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
+// for logs
+app.use(logger(env.morgan.mode, env.morgan.options));
+
 //define the layouts before the routes
 //we need to tell the server to use them
 app.use(expressLayouts);
@@ -96,7 +98,8 @@ app.set('views', './views');
 
 //add a middleware which takes session cookie and encrypts it
 //mongo store is used to store the session in the db
-app.use(session({
+app.use(
+    session({
     name: 'codeial',
     //TODO change the secret before deployment in production mode
     secret: env.session_cookie_key,
@@ -106,19 +109,17 @@ app.use(session({
         //in millisecs
         maxAge: (1000*60*100)
     },
-    store: new MongoStore(
-        {
-        
-            mongooseConnection: db,
-            autoRemove: 'disabled'
-        },
-
-        // callback func if connection is not established
+    store: new MongoStore({
+        mongooseConnection: db,
+        autoRemove: "disabled"
+    },
+    // callback func if connection is not established
         function(err) {
-            console.log(err || 'connect-mongodb setup ok');
+            console.log(err || "connect-mongodb setup ok");
         }
-        )
-}));
+    )
+})
+);
 
 // tell the app to use passport
 app.use(passport.initialize());
